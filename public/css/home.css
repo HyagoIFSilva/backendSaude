@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+
+body {
+    background-image: url(../img/telao.png);
+    background-size: cover;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+button:hover , form .btn-enviar input:hover{
+    box-shadow: 0px 2px 8px #F80000;
+    transform: scale(1.05);
+    transition: .2s;
+}
+
+.logo {
+    width: 150px;
+}
+
+.interface {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.flex {
+    display: flex;
+}
+
+.btn-contato button {
+    color: #fff;
+    padding: 10px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #d00101;
+    border: 0;
+    border-radius: 30px;
+    cursor: pointer
+    
+}
+
+header {
+    padding: 5px 4%;
+
+}
+
+header>.interface {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header a {
+    color: #595959;
+    text-decoration: none;
+    display: inline-block;
+    transition: .2s;
+}
+
+header a:hover {
+    color: #fff;
+    transform: scale(1.05);
+}
+
+header nav ul {
+    list-style-type: none;
+}
+
+
+header nav li {
+    display: inline-block;
+    padding: 0 40px;
+}
+
+
+main {
+    flex-grow: 1; 
+}
+main .descricao{
+    padding: 40px;
+    display: flex;
+    width: 1000px;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    flex-direction: column;
+}
+
+main h1{
+    color: #fff;
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+
+main p{
+    color: #fff;
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    width: 300px;
+}
+
+.movies {
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container-cards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-movie {
+    background-color: transparent;
+    border-radius: 20px;
+    width: 180px;
+    position: relative;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.card-movie:hover {
+    transform: scale(1.05);
+}
+
+.poster {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.poster img {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.classificacao {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 50%;
+    padding: 8px 12px;
+}
+
+.classificacao._l   { background-color: #28a745; color: white; }
+.classificacao._10  { background-color: #007bff; color: white; }
+.classificacao._12  { background-color: #ffc107; color: black; }
+.classificacao._16  { background-color: #dc3545; color: white; }
+.classificacao._18  { background-color: #000; color: white; }
+
+.info {
+    margin-top: 10px;
+}
+
+.info h3 {
+    font-size: 1rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.info p {
+    font-size: 0.85rem;
+    color: #bbb;
+    text-transform: uppercase;
+}
+
+
+

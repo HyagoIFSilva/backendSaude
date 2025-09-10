@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+
+body {
+  margin: 0;
+  background-color: #000;
+  color: #fff;
+
+}
+
+.container {
+  max-width: 400px;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  letter-spacing: 2px;
+  font-family: 'Oswald', sans-serif !important;
+  font-size: 42px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 50px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  text-align: left;
+  font-size: 16px;
+  margin-top: 10px;
+  color: #fff;
+  font-family: 'Oswald', sans-serif;
+}
+
+input,textarea {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #b30000;
+  padding: 10px;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #ff1a1a;
+}
+
+textarea {
+  resize: none;
+  height: 50px;
+}
+
+.btn-enviar {
+  margin-top: 60px;
+  background-color: #800000;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 8px 0;
+  font-size: 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #cc0000;
+}
+
+.alert {
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.alert-success {
+  background: #e6ffed;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.alert-danger {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  color: #7f1d1d;
+}
+
+/* realçar campos com erro */
+.input-invalid {
+  border-color: #ef4444 !important;
+  outline: none;
+}
+
+/* mensagem menor abaixo do campo */
+.field-error {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #b91c1c;
+}
