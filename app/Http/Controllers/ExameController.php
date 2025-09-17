@@ -1,46 +1,73 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Exame; 
+use App\Models\Exame;
+use Illuminate\Support\Facades\Auth;
 
 class ExameController extends Controller
 {
+    /**
+     * Salva um novo exame no banco de dados.
+     */
     public function store(Request $request)
     {
-       
-        $request->validate([
-            'exame_imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB Max
-            'titulo' => 'nullable|string|max:255',
+        $validatedData = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'tipo_exame' => 'required|string|max:255',
         ]);
 
-        // 2. Salvar o arquivo no servidor
-        if ($request->hasFile('exame_imagem')) {
-            // A chave 'exame_imagem' é a mesma que usamos no formData.append()
-            $file = $request->file('exame_imagem');
+        $path = $request->file('image')->store('exames', 'public');
 
-            // Salva o arquivo em 'storage/app/public/exames' e gera um nome único
-            $path = $file->store('public/exames');
+        $exame = Exame::create([
+            'user_id' => Auth::id(),
+            'tipo_exame' => $validatedData['tipo_exame'],
+            'image_path' => $path,
+        ]);
 
-            // 3. Salvar o caminho do arquivo no banco de dados
-            // Você não salva o arquivo em si no banco, apenas o caminho para ele!
-            // Exemplo (você precisará de um model e migration para 'exames'):
-            // $exame = new Exame();
-            // $exame->user_id = auth()->id(); // Exemplo para pegar o usuário logado
-            // $exame->titulo = $request->input('titulo');
-            // $exame->caminho_arquivo = $path;
-            // $exame->save();
+        return response()->json($exame, 201);
+    }
 
-            // Retorna uma resposta de sucesso
-            return response()->json([
-                'message' => 'Arquivo enviado com sucesso!',
-                'path' => $path // Retorna o caminho do arquivo salvo
-            ], 201);
+    /**
+     * Lista todos os exames do usuário autenticado.
+     */
+    public function index()
+    {
+        $exames = Auth::user()->exames()->orderBy('created_at', 'desc')->get();
+        return response()->json($exames);
+    }
+
+    /**
+     * Atualiza um exame específico.
+     */
+    public function update(Request $request, Exame $exame)
+    {
+        if ($exame->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Não autorizado'], 403);
         }
 
-        // Retorna um erro se nenhum arquivo foi enviado
-        return response()->json(['error' => 'Nenhum arquivo enviado.'], 400);
+        $validatedData = $request->validate([
+            'tipo_exame' => 'required|string|max:255',
+        ]);
+
+        $exame->update($validatedData);
+
+        return response()->json($exame);
+    }
+
+    /**
+     * "Deleta" suavemente um exame (soft delete).
+     */
+    public function destroy(Exame $exame)
+    {
+        if ($exame->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Não autorizado'], 403);
+        }
+
+        $exame->delete();
+
+        return response()->json(['message' => 'Exame movido para a lixeira.'], 200);
     }
 }

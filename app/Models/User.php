@@ -16,18 +16,18 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'is_admin', 
-    'cep',        
-    'logradouro', 
-    'numero',     
-    'bairro',     
-    'cidade',     
-    'uf',         
-];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'is_admin', 
+        'cep',
+        'logradouro', 
+        'numero',
+        'bairro',
+        'cidade',
+        'uf',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -46,6 +46,14 @@ protected $fillable = [
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean', 
+        'is_admin' => 'boolean',
     ];
+
+    /**
+     * Define o relacionamento onde um Usuário tem muitos Exames.
+     */
+    public function exames()
+    {
+        return $this->hasMany(Exame::class);
+    }
 }

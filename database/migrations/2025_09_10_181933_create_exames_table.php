@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('tipo_exame');
             $table->string('image_path'); 
             $table->timestamps(); 
+            $table->softDeletes();
         });
     }
 
