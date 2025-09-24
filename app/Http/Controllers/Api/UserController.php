@@ -5,20 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-   
     public function index()
     {
         return User::all();
     }
 
-
     public function store(Request $request)
-    {   
+    {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -36,7 +35,7 @@ class UserController extends Controller
 
         $user = User::create($validatedData);
 
-        return response()->json($user, 201); 
+        return response()->json($user, 201);
     }
 
     public function show(User $user)
@@ -65,15 +64,37 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return response()->json($user, 200); 
+        return response()->json($user, 200);
     }
 
-    
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->json(null, 204); 
+        return response()->json(null, 204);
     }
+    
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        ]);
+        
+        $user->update($validatedData);
+
+        return response()->json($user, 200);
+    }
+
+    public function destroyProfile()
+    {
+        $user = Auth::user();
+        $user->delete();
+
+        return response()->json(['message' => 'Conta desativada com sucesso.'], 200);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -81,9 +102,9 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = \App\Models\User::where('email', $credentials['email'])->first();
+        $user = User::where('email', $credentials['email'])->first();
 
-        if (! $user || ! \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return response()->json([
                 'message' => 'As credenciais fornecidas estão incorretas.'
             ], 401);
