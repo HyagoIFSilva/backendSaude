@@ -2,11 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController; 
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ExameController;
 use App\Http\Controllers\FilmeController;
 use App\Http\Controllers\ContatoController;
-
+use App\Http\Controllers\Api\RemedioController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -17,12 +17,14 @@ Route::post('/home', [FilmeController::class, 'indexApi']);
 Route::get('/contato', [ContatoController::class, 'indexApi']);
 Route::post('/contato', [ContatoController::class, 'indexApi']);
 
-
+Route::get('/remedios/{remedio}/ubs', [RemedioController::class, 'findUbsByRemedio'])
+     ->middleware('auth:sanctum');
+    
 Route::post('/login', [UserController::class, 'login']);
-Route::apiResource('users', UserController::class); 
+Route::apiResource('users', UserController::class);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/exames', [ExameController::class, 'index']);      
-    Route::post('/exames', [ExameController::class, 'store']);     
-    Route::put('/exames/{exame}', [ExameController::class, 'update']);  
+    Route::get('/exames', [ExameController::class, 'index']);
+    Route::post('/exames', [ExameController::class, 'store']);
+    Route::put('/exames/{exame}', [ExameController::class, 'update']);
     Route::delete('/exames/{exame}', [ExameController::class, 'destroy']);
 });

@@ -29,7 +29,7 @@ class ExameController extends Controller
 
         return response()->json($exame, 201);
     }
-
+    
     /**
      * Lista todos os exames do usuário autenticado.
      */
