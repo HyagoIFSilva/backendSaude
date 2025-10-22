@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-   
+
     public function index()
     {
         return User::all();
@@ -18,7 +18,7 @@ class UserController extends Controller
 
 
     public function store(Request $request)
-    {   
+    {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -30,13 +30,15 @@ class UserController extends Controller
             'bairro' => 'nullable|string|max:255',
             'cidade' => 'nullable|string|max:255',
             'uf' => 'nullable|string|max:2',
+            'altura' => 'nullable|integer|min:50|max:300',
+            'peso' => 'nullable|numeric|min:10|max:500',
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
-
+        
         $user = User::create($validatedData);
-
-        return response()->json($user, 201); 
+        $user->update($validatedData);
+        return response()->json($user, 201);
     }
 
     public function show(User $user)
@@ -65,14 +67,14 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return response()->json($user, 200); 
+        return response()->json($user, 200);
     }
 
-    
+
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->json(null, 204); 
+        return response()->json(null, 204);
     }
     public function login(Request $request)
     {

@@ -20,13 +20,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin', 
+        'is_admin',
         'cep',
-        'logradouro', 
+        'logradouro',
         'numero',
         'bairro',
         'cidade',
         'uf',
+        'altura',
+        'peso',
     ];
 
     /**
@@ -55,5 +57,9 @@ class User extends Authenticatable
     public function exames()
     {
         return $this->hasMany(Exame::class);
+    }
+    public function waterIntakes()
+    {
+        return $this->hasMany(WaterIntake::class);
     }
 }
