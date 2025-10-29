@@ -5,17 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-
     public function index()
     {
         return User::all();
     }
-
 
     public function store(Request $request)
     {
@@ -32,12 +31,13 @@ class UserController extends Controller
             'uf' => 'nullable|string|max:2',
             'altura' => 'nullable|integer|min:50|max:300',
             'peso' => 'nullable|numeric|min:10|max:500',
+            'blood_type' => ['nullable', 'string', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])],
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
         
         $user = User::create($validatedData);
-        $user->update($validatedData);
+
         return response()->json($user, 201);
     }
 
@@ -58,6 +58,9 @@ class UserController extends Controller
             'bairro' => 'nullable|string|max:255',
             'cidade' => 'nullable|string|max:255',
             'uf' => 'nullable|string|max:2',
+            'altura' => 'nullable|integer|min:50|max:300',
+            'peso' => 'nullable|numeric|min:10|max:500',
+            'blood_type' => ['nullable', 'string', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])],
         ]);
 
         if ($request->has('password') && $request->password != '') {
@@ -70,12 +73,12 @@ class UserController extends Controller
         return response()->json($user, 200);
     }
 
-
     public function destroy(User $user)
     {
         $user->delete();
         return response()->json(null, 204);
     }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -83,9 +86,9 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = \App\Models\User::where('email', $credentials['email'])->first();
+        $user = User::where('email', $credentials['email'])->first();
 
-        if (! $user || ! \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return response()->json([
                 'message' => 'As credenciais fornecidas estão incorretas.'
             ], 401);
@@ -99,5 +102,31 @@ class UserController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 200);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        $validBloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'altura' => 'nullable|integer|min:50|max:300', 
+            'peso' => 'nullable|numeric|min:10|max:500',   
+            'blood_type' => ['nullable', 'string', Rule::in($validBloodTypes)], 
+        ]);
+        
+        $user->update($validatedData);
+
+        return response()->json($user, 200);
+    }
+
+    public function destroyProfile()
+    {
+        $user = Auth::user();
+        $user->delete(); 
+
+        return response()->json(['message' => 'Conta desativada com sucesso.'], 200);
     }
 }
