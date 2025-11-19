@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes; // <-- Importante para desativar conta
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    // Adicionado SoftDeletes aqui também
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -53,14 +55,26 @@ class User extends Authenticatable
     ];
 
     /**
-     * Define o relacionamento onde um Usuário tem muitos Exames.
+     * Relacionamento com Exames
      */
     public function exames()
     {
         return $this->hasMany(Exame::class);
     }
+
+    /**
+     * Relacionamento com Consumo de Água
+     */
     public function waterIntakes()
     {
         return $this->hasMany(WaterIntake::class);
+    }
+
+    /**
+     * Relacionamento com Alergias (ADICIONADO)
+     */
+    public function allergies()
+    {
+        return $this->hasMany(Allergy::class);
     }
 }

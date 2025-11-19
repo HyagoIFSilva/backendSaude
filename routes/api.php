@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\RemedioController;
 use App\Http\Controllers\Api\WaterIntakeController;
 use App\Http\Controllers\FilmeController;
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\Api\AllergyController;
 
 // --- Rotas Públicas ---
 Route::get('/home', [FilmeController::class, 'indexApi']);
@@ -21,7 +22,7 @@ Route::apiResource('users', UserController::class)->only(['store']);
 
 // --- Grupo de Rotas Protegidas (Exigem Login) ---
 Route::middleware('auth:sanctum')->group(function () {
-    
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -38,5 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/water-intake/today', [WaterIntakeController::class, 'getTodaysIntake']);
     Route::put('/water-intake/today', [WaterIntakeController::class, 'updateTodaysIntake']);
-    Route::get('/water-intake/history', [WaterIntakeController::class, 'getHistoricalIntake']); // <-- Rota Adicionada
+    Route::get('/water-intake/history', [WaterIntakeController::class, 'getHistoricalIntake']);
+    Route::get('/allergies', [AllergyController::class, 'index']);
+    Route::post('/allergies', [AllergyController::class, 'store']);
+    Route::delete('/allergies/{allergy}', [AllergyController::class, 'destroy']);
 });
