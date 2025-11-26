@@ -26,6 +26,7 @@ class User extends Authenticatable
         'altura',
         'peso',
         'blood_type',
+        'avatar',
     ];
 
     protected $hidden = [
@@ -62,4 +63,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Symptom::class);
     }
-}
+
+    public function vaccines()
+    {
+        return $this->hasMany(vaccine::class);
+    }
+    
+} 

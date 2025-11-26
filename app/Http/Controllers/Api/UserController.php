@@ -116,6 +116,12 @@ class UserController extends Controller
             'peso' => 'nullable|numeric|min:10|max:500',   
             'blood_type' => ['nullable', 'string', Rule::in($validBloodTypes)], 
         ]);
+
+        // Se a senha foi enviada, atualiza também
+        if ($request->has('password') && $request->password != '') {
+            $request->validate(['password' => 'string|min:8']);
+            $validatedData['password'] = Hash::make($request->password);
+        }
         
         $user->update($validatedData);
 
@@ -128,5 +134,36 @@ class UserController extends Controller
         $user->delete(); 
 
         return response()->json(['message' => 'Conta desativada com sucesso.'], 200);
+    }
+
+    /**
+     * Upload da foto de perfil (avatar)
+     */
+    public function uploadAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $user = Auth::user();
+        // Salva na pasta 'public/avatars'
+        $path = $request->file('avatar')->store('avatars', 'public');
+
+        $user->update(['avatar' => $path]);
+
+        return response()->json(['avatar_url' => $path], 200);
+    }
+
+    /**
+     * Retorna o prontuário médico completo do usuário
+     */
+    public function getMedicalRecord()
+    {
+        // Carrega o usuário com TODOS os relacionamentos médicos
+        // Certifique-se de que essas funções (allergies, vaccines, etc) existam no Model User
+        $user = User::with(['allergies', 'vaccines', 'exames', 'glucoseReadings'])
+                    ->find(Auth::id());
+        
+        return response()->json($user);
     }
 }

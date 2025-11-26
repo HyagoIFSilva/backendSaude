@@ -61,4 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/symptoms', [SymptomController::class, 'index']);
     Route::post('/symptoms', [SymptomController::class, 'store']);
     Route::delete('/symptoms/{symptom}', [SymptomController::class, 'destroy']);
+    Route::post('/user/avatar', [UserController::class, 'uploadAvatar']);
+    Route::get('/user/medical-record', [UserController::class, 'getMedicalRecord']);
 });
