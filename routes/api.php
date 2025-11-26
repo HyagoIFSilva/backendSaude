@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\WaterIntakeController;
 use App\Http\Controllers\FilmeController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\Api\AllergyController;
+use App\Http\Controllers\Api\GlucoseController;
+use App\Http\Controllers\Api\VaccineController;
+use App\Http\Controllers\Api\SymptomController;
 
 // --- Rotas Públicas ---
 Route::get('/home', [FilmeController::class, 'indexApi']);
@@ -43,4 +46,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/allergies', [AllergyController::class, 'index']);
     Route::post('/allergies', [AllergyController::class, 'store']);
     Route::delete('/allergies/{allergy}', [AllergyController::class, 'destroy']);
+
+
+    Route::get('/glucose', [GlucoseController::class, 'index']);
+    Route::post('/glucose', [GlucoseController::class, 'store']);
+    Route::delete('/glucose/{reading}', [GlucoseController::class, 'destroy']);
+
+    Route::get('/vaccines', [VaccineController::class, 'index']);
+    Route::post('/vaccines', [VaccineController::class, 'store']);
+    Route::put('/vaccines/{vaccine}', [VaccineController::class, 'update']);
+    Route::delete('/vaccines/{vaccine}', [VaccineController::class, 'destroy']);
+
+
+    Route::get('/symptoms', [SymptomController::class, 'index']);
+    Route::post('/symptoms', [SymptomController::class, 'store']);
+    Route::delete('/symptoms/{symptom}', [SymptomController::class, 'destroy']);
 });
